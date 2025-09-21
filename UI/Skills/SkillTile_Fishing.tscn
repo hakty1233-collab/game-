@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://c700qhwpr0jo2"]
+
+[ext_resource type="Script" uid="uid://dnax1a6ej56uh" path="res://UI/Skills/skill_tile_fishing.gd" id="1_f7xdt"]
+[ext_resource type="Texture2D" uid="uid://c4cx6fnmqss1c" path="res://UI/Icons/otteria_skill_icons.png" id="2_x4meq"]
+
+[node name="SkillTile_Fishing" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_f7xdt")
+
+[node name="Icon" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(40, 50)
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 50.0
+texture = ExtResource("2_x4meq")
+
+[node name="Level" type="Label" parent="."]
+layout_mode = 0
+offset_top = 48.0
+offset_right = 45.0
+offset_bottom = 71.0
+text = "1"
+horizontal_alignment = 1

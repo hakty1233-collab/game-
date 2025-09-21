@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://3b43bopbn0ho"]
+
+[ext_resource type="Script" uid="uid://bjm007yxgbb6k" path="res://xp_bar.gd" id="1_gjd6j"]
+[ext_resource type="Texture2D" uid="uid://bbn5mbh3brydp" path="res://UI/Icons/otteria_bar_empty.png" id="2_lhych"]
+[ext_resource type="Texture2D" uid="uid://gwuldejfg7no" path="res://UI/Icons/otteria_bar_fill_xp.png" id="3_bjcgk"]
+
+[node name="XPBar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gjd6j")
+
+[node name="Bar" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 36.0
+offset_right = 262.0
+offset_bottom = 53.0
+texture_under = ExtResource("2_lhych")
+texture_progress = ExtResource("3_bjcgk")
+
+[node name="Text" type="Label" parent="."]
+layout_mode = 0
+offset_left = 79.0
+offset_top = 14.0
+offset_right = 205.0
+offset_bottom = 37.0

@@ -1,0 +1,205 @@
+[gd_scene load_steps=16 format=3 uid="uid://bomq3oewmchp5"]
+
+[ext_resource type="Script" uid="uid://1f4tndyy64d3" path="res://Scripts/HUD.gd" id="1_vs5gg"]
+[ext_resource type="Texture2D" uid="uid://dgs6mq8pxw7k4" path="res://UI/Art/9-panel.png" id="2_23s3h"]
+[ext_resource type="Texture2D" uid="uid://06l6hpgvvio" path="res://UI/Art/Skill-panel-test.png" id="2_phrgc"]
+[ext_resource type="Texture2D" uid="uid://ci0ldon7yhru3" path="res://UI/Icons/New Project (6).png" id="2_rnl6m"]
+[ext_resource type="Texture2D" uid="uid://c4cx6fnmqss1c" path="res://UI/Icons/otteria_skill_icons.png" id="3_2o5uh"]
+[ext_resource type="Script" uid="uid://b0yif2ph7xeqb" path="res://UI/mini_map.gd" id="3_b1lf8"]
+[ext_resource type="Script" uid="uid://btcrw40ofeju7" path="res://UI/toolbelt.gd" id="5_8nmcf"]
+[ext_resource type="Texture2D" uid="uid://mqwsdhydy0bn" path="res://UI/Icons/Bag (1).png" id="5_i0a73"]
+[ext_resource type="PackedScene" uid="uid://dif0eucg5n8dr" path="res://UI/CraftingUI.tscn" id="5_vs5gg"]
+[ext_resource type="PackedScene" uid="uid://3b43bopbn0ho" path="res://UI/xp_bar.tscn" id="6_1ui3w"]
+[ext_resource type="Texture2D" uid="uid://dywkdvc3eewq5" path="res://UI/Icons/Skill (1).png" id="6_pf7ph"]
+[ext_resource type="PackedScene" uid="uid://bl70lj3cn8lwd" path="res://Systems/xp_popup.tscn" id="7_0j753"]
+[ext_resource type="PackedScene" uid="uid://c6dgjat0en4ga" path="res://dialogue_box.tscn" id="7_phrgc"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8nmcf"]
+texture = ExtResource("2_phrgc")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vs5gg"]
+texture = ExtResource("2_23s3h")
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+metadata/_edit_horizontal_guides_ = [-106.0]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("1_vs5gg")
+SKILL_COLS = null
+SKILL_ROWS = null
+SKILL_MARGIN_LEFT = null
+SKILL_MARGIN_RIGHT = null
+SKILL_MARGIN_TOP = null
+SKILL_MARGIN_BOTTOM = null
+SKILL_BAR_H = null
+SKILL_BAR_V = null
+
+[node name="MainHUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SkillUI" type="PanelContainer" parent="CanvasLayer/MainHUD"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 26.0
+offset_right = 345.0
+offset_bottom = 222.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_8nmcf")
+
+[node name="Slots" type="MarginContainer" parent="CanvasLayer/MainHUD/SkillUI"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/MainHUD/SkillUI/Slots"]
+layout_mode = 2
+columns = 3
+
+[node name="InventoryUI" type="PanelContainer" parent="CanvasLayer/MainHUD" groups=["Inventory"]]
+layout_mode = 0
+offset_left = 875.0
+offset_top = 250.0
+offset_right = 1133.0
+offset_bottom = 551.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_vs5gg")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer/MainHUD/InventoryUI"]
+layout_mode = 2
+texture = ExtResource("2_rnl6m")
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/MainHUD/InventoryUI"]
+layout_mode = 2
+columns = 6
+
+[node name="ToolBeltUI" type="PanelContainer" parent="CanvasLayer/MainHUD"]
+layout_mode = 0
+offset_left = 688.0
+offset_top = 497.0
+offset_right = 873.0
+offset_bottom = 550.0
+script = ExtResource("5_8nmcf")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="CanvasLayer/MainHUD/ToolBeltUI"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/MainHUD/ToolBeltUI"]
+layout_mode = 2
+
+[node name="MiniMap" type="TextureRect" parent="CanvasLayer/MainHUD"]
+layout_mode = 0
+offset_left = 1003.0
+offset_top = 2.0
+offset_right = 1150.0
+offset_bottom = 134.0
+stretch_mode = 3
+script = ExtResource("3_b1lf8")
+
+[node name="MinimapViewport" type="SubViewport" parent="CanvasLayer/MainHUD/MiniMap"]
+size = Vector2i(147, 132)
+render_target_update_mode = 4
+
+[node name="MinimapCamera" type="Camera2D" parent="CanvasLayer/MainHUD/MiniMap/MinimapViewport"]
+zoom = Vector2(2, 2)
+
+[node name="MiniMapWorld" type="Node2D" parent="CanvasLayer/MainHUD/MiniMap/MinimapViewport"]
+
+[node name="TerrainTileMap" type="TileMap" parent="CanvasLayer/MainHUD/MiniMap/MinimapViewport/MiniMapWorld"]
+format = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/MainHUD/MiniMap/MinimapViewport/MiniMapWorld"]
+
+[node name="Sprite2D2" type="Sprite2D" parent="CanvasLayer/MainHUD/MiniMap/MinimapViewport/MiniMapWorld"]
+
+[node name="TotalLevelLabel" type="Label" parent="CanvasLayer/MainHUD"]
+layout_mode = 0
+offset_left = 527.0
+offset_top = 254.0
+offset_right = 567.0
+offset_bottom = 277.0
+
+[node name="CraftingUI" parent="CanvasLayer/MainHUD" instance=ExtResource("5_vs5gg")]
+layout_mode = 1
+offset_left = 432.0
+offset_top = 298.0
+offset_right = 432.0
+offset_bottom = 298.0
+
+[node name="DialogueBox" parent="CanvasLayer/MainHUD" groups=["DialogueUI"] instance=ExtResource("7_phrgc")]
+visible = false
+offset_left = 725.0
+offset_top = 232.0
+offset_right = 725.0
+offset_bottom = 232.0
+
+[node name="FloatingLabels" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 517.0
+offset_top = 124.0
+offset_right = 557.0
+offset_bottom = 164.0
+
+[node name="ItemTooltip" type="Label" parent="CanvasLayer/FloatingLabels"]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 533.0
+offset_right = 1140.0
+offset_bottom = 556.0
+
+[node name="SkillTooltip" type="Label" parent="CanvasLayer/FloatingLabels"]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 551.0
+offset_right = 1140.0
+offset_bottom = 574.0
+
+[node name="ToggleInventory" type="TextureButton" parent="CanvasLayer"]
+offset_left = 1093.0
+offset_top = 597.0
+offset_right = 1127.0
+offset_bottom = 630.0
+toggle_mode = true
+texture_normal = ExtResource("5_i0a73")
+
+[node name="ToggleToolBelt" type="TextureButton" parent="CanvasLayer"]
+offset_left = 895.0
+offset_top = 598.0
+offset_right = 928.0
+offset_bottom = 630.0
+toggle_mode = true
+texture_normal = ExtResource("3_2o5uh")
+
+[node name="ToggleSkills" type="TextureButton" parent="CanvasLayer"]
+offset_left = 1002.0
+offset_top = 597.0
+offset_right = 1035.0
+offset_bottom = 630.0
+toggle_mode = true
+texture_normal = ExtResource("6_pf7ph")
+
+[node name="OpenMap" type="TextureButton" parent="CanvasLayer"]
+offset_left = 948.0
+offset_top = 598.0
+offset_right = 981.0
+offset_bottom = 630.0
+toggle_mode = true
+texture_normal = ExtResource("3_2o5uh")
+
+[node name="XPBar" parent="CanvasLayer" instance=ExtResource("6_1ui3w")]
+visible = false
+offset_left = 464.0
+offset_top = 576.0
+offset_right = -402.0
+offset_bottom = -13.0
+
+[node name="XP_Popup" parent="CanvasLayer" instance=ExtResource("7_0j753")]
+offset_left = 513.0
+offset_top = 177.0
+offset_right = -472.0
+offset_bottom = -313.0

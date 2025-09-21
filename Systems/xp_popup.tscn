@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl70lj3cn8lwd"]
+
+[ext_resource type="Script" uid="uid://by4qai2hg0wu1" path="res://xp_popup.gd" id="1_fov5o"]
+
+[node name="XP_Popup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 449.0
+offset_top = 44.0
+offset_right = -536.0
+offset_bottom = -446.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fov5o")
+
+[node name="skill_icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="xp_label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="xp_bar" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

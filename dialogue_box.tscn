@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6dgjat0en4ga"]
+
+[ext_resource type="Script" uid="uid://cf50vjfkdnghi" path="res://DialogueBox.gd" id="1_senjy"]
+
+[node name="DialogueBox" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 178.0
+offset_top = 92.0
+offset_right = 178.0
+offset_bottom = 92.0
+script = ExtResource("1_senjy")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 143.0
+offset_bottom = 48.0
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 143.0
+offset_bottom = 47.0
+autowrap_mode = 1

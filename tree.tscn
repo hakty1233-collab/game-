@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://4c5p3xfsfkro"]
+
+[ext_resource type="Script" uid="uid://ceudh7em04rmr" path="res://tree.gd" id="1_gvmkm"]
+[ext_resource type="Texture2D" uid="uid://bjef8xan6ebw8" path="res://Tree/Oak_Tree.png" id="3_d2g23"]
+[ext_resource type="Texture2D" uid="uid://8tuyt3gdljl1" path="res://Tree/Oak_Tree_Small.png" id="3_gvmkm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gvmkm"]
+radius = 15.5242
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nnvrw"]
+size = Vector2(14, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2g23"]
+atlas = ExtResource("3_gvmkm")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_d2g23"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2g23")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="ChoppableTree" type="Area2D"]
+script = ExtResource("1_gvmkm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 25)
+shape = SubResource("CircleShape2D_gvmkm")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 16.5)
+shape = SubResource("RectangleShape2D_nnvrw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-2.38419e-07, 0.5)
+scale = Vector2(1, 0.9625)
+texture = ExtResource("3_d2g23")
+
+[node name="StumpSprite" type="AnimatedSprite2D" parent="."]
+visible = false
+position = Vector2(0, 11)
+scale = Vector2(2.4375, 1.66667)
+sprite_frames = SubResource("SpriteFrames_d2g23")

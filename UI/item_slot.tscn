@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://ecqllchyhh3v"]
+
+[ext_resource type="Script" uid="uid://cckcdwp2ymk8h" path="res://item_slot.gd" id="1_k57er"]
+
+[node name="ItemSlot" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_k57er")
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Qty" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

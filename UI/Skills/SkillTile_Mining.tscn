@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dymxu0ahw5pf2"]
+
+[ext_resource type="Script" uid="uid://bp2ccim8wx3hq" path="res://UI/Skills/skill_tile_mining.gd" id="1_3s47h"]
+[ext_resource type="Texture2D" uid="uid://c4cx6fnmqss1c" path="res://UI/Icons/otteria_skill_icons.png" id="2_ye7ub"]
+
+[node name="SkillTile_Mining" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_3s47h")
+
+[node name="Icon" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(40, 50)
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 50.0
+texture = ExtResource("2_ye7ub")
+
+[node name="Level" type="Label" parent="."]
+layout_mode = 0
+offset_top = 48.0
+offset_right = 45.0
+offset_bottom = 71.0
+text = "1"
+horizontal_alignment = 1

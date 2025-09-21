@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cosnns5keq7xc"]
+
+[ext_resource type="Script" uid="uid://sk038s810m57" path="res://Scripts/CraftingStation.gd" id="1_0dn3g"]
+[ext_resource type="Texture2D" uid="uid://c4cx6fnmqss1c" path="res://UI/Icons/otteria_skill_icons.png" id="2_jccx7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yk45y"]
+size = Vector2(35, 35)
+
+[node name="StationBase" type="Area2D"]
+script = ExtResource("1_0dn3g")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0.5)
+shape = SubResource("RectangleShape2D_yk45y")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_jccx7")

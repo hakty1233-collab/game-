@@ -1,0 +1,70 @@
+[gd_scene load_steps=9 format=3 uid="uid://dif0eucg5n8dr"]
+
+[ext_resource type="Script" uid="uid://jde6wfwbc6cx" path="res://UI/CraftingUI.gd" id="1_v5w7q"]
+[ext_resource type="Texture2D" uid="uid://b06jv65jmewvk" path="res://UI/Art/Penel.png" id="2_4eiyh"]
+[ext_resource type="Texture2D" uid="uid://cocvhmu53btmu" path="res://UI/Icons/Craft.png" id="2_wjxxu"]
+[ext_resource type="Texture2D" uid="uid://c003utobo85nw" path="res://UI/Art/x-button.png" id="3_aqb0e"]
+[ext_resource type="Texture2D" uid="uid://bg5ca0k30b8ov" path="res://UI/Art/x-button-hover.png" id="3_s0v6e"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_aqb0e"]
+texture = ExtResource("2_4eiyh")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ovgci"]
+texture = ExtResource("3_s0v6e")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6o4js"]
+texture = ExtResource("3_aqb0e")
+
+[node name="CraftingUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_v5w7q")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 411.0
+offset_bottom = 191.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_aqb0e")
+
+[node name="ListRoot" type="VBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_right = 411.0
+offset_bottom = 191.0
+
+[node name="Title" type="Label" parent="Panel/ListRoot"]
+layout_mode = 2
+
+[node name="RecipeList" type="ItemList" parent="Panel/ListRoot"]
+layout_mode = 2
+
+[node name="CloseBtn" type="Button" parent="Panel"]
+layout_mode = 2
+offset_left = 370.0
+offset_top = 2.0
+offset_right = 405.0
+offset_bottom = 37.0
+theme_override_styles/hover = SubResource("StyleBoxTexture_ovgci")
+theme_override_styles/normal = SubResource("StyleBoxTexture_6o4js")
+
+[node name="CraftOne" type="Button" parent="Panel"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+offset_left = 298.0
+offset_top = 109.0
+offset_right = 366.0
+offset_bottom = 149.0
+
+[node name="CraftAll" type="Button" parent="Panel"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+offset_left = 46.0
+offset_top = 111.0
+offset_right = 130.0
+offset_bottom = 151.0
+size_flags_horizontal = 8
+icon = ExtResource("2_wjxxu")
+icon_alignment = 1
