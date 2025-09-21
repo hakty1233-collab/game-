@@ -1,7 +1,7 @@
 extends Node
 
 @export var openai_api_key: String = "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"  # Put your key here
-@export var model: String = "grok-3.5-mini"
+@export var model: String = "grok-beta"
 
 var http_request: HTTPRequest
 
@@ -12,42 +12,66 @@ func _ready():
 # Query Grok
 func query(prompt: String, callback: Callable) -> void:
 	if openai_api_key == "":
-		push_warning("No OpenAI API key set!")
+		push_warning("No API key set!")
+		callback.call("Hello there!")
 		return
 
-	var url: String = "https://api.openai.com/v1/responses"
+	# Correct Grok API endpoint
+	var url: String = "https://api.x.ai/v1/chat/completions"
 	var body_dict: Dictionary = {
+		"messages": [
+			{
+				"role": "system",
+				"content": "You are a friendly NPC in a fantasy RPG game. Keep responses short (1-2 sentences) and in character as a villager or traveler."
+			},
+			{
+				"role": "user", 
+				"content": prompt
+			}
+		],
 		"model": model,
-		"input": prompt
+		"stream": false,
+		"temperature": 0.7
 	}
 	var headers: Array = [
 		"Content-Type: application/json",
 		"Authorization: Bearer %s" % openai_api_key
 	]
 
-	var json_body: String = JSON.stringify(body_dict)  # Pass as String
+	var json_body: String = JSON.stringify(body_dict)
 
 	# Connect request_completed for this query
-	http_request.connect("request_completed", Callable(self, "_on_request_completed").bind(callback))
+	if http_request.request_completed.is_connected(_on_request_completed):
+		http_request.request_completed.disconnect(_on_request_completed)
+	http_request.request_completed.connect(_on_request_completed.bind(callback), CONNECT_ONE_SHOT)
 
 	# Send HTTP POST request
 	http_request.request(url, headers, HTTPClient.METHOD_POST, json_body)
 
-func _on_request_completed(result: int, response_code: int, headers: Array, body: PackedByteArray, callback: Callable) -> void:
+func _on_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray, callback: Callable) -> void:
 	if response_code != 200:
-		push_warning("Grok request failed: %s" % response_code)
-		callback.call("Error")
+		print("Grok request failed: ", response_code)
+		print("Response: ", body.get_string_from_utf8())
+		callback.call("Hello, traveler! How are you today?")
 		return
 
-	# Parse JSON
+	# Parse JSON response
 	var body_text: String = body.get_string_from_utf8()
-	var data = JSON.parse_string(body_text)
-	if data.error != OK:
-		callback.call("Error parsing response")
+	var json = JSON.new()
+	var parse_result = json.parse(body_text)
+	
+	if parse_result != OK:
+		print("Error parsing JSON: ", json.error_string)
+		callback.call("Greetings, friend!")
 		return
 
-	var text: String = ""
-	if data.result.has("output") and data.result["output"].size() > 0:
-		text = str(data.result["output"][0]["content"][0]["text"])
+	var data = json.data
+	var text: String = "Nice day, isn't it?"
+	
+	# Extract the AI response
+	if data.has("choices") and data["choices"].size() > 0:
+		var choice = data["choices"][0]
+		if choice.has("message") and choice["message"].has("content"):
+			text = choice["message"]["content"].strip_edges()
 
 	callback.call(text)

@@ -3,14 +3,18 @@ extends CharacterBody2D
 @export var speed: float = 80.0
 @export var wander_radius: float = 200.0
 @export var detect_radius: float = 150.0
+@export var npc_personality: String = "friendly villager"  # Can customize per NPC
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var grok_api: Node = get_node("/root/GrokAPI")  # Assuming it's an autoload
 
 var target_position: Vector2
 var player: Node2D
 var busy_talking: bool = false
 var last_position: Vector2
 var stuck_timer: float = 0.0
+var last_direction: Vector2 = Vector2.DOWN
+var conversation_count: int = 0
 
 signal said_to_player(message: String)
 
@@ -20,7 +24,6 @@ func _ready():
 		push_warning("No player found in 'player' group!")
 	_set_random_target()
 	last_position = global_position
-
 
 func _physics_process(delta: float) -> void:
 	if busy_talking:
@@ -46,7 +49,6 @@ func _physics_process(delta: float) -> void:
 
 	last_position = global_position
 
-
 # ---------- Movement ----------
 func _set_random_target():
 	var angle = randf() * TAU
@@ -61,40 +63,67 @@ func _move_towards_target():
 
 	velocity = dir.normalized() * speed
 
-
 # ---------- Animation ----------
 func _update_animation():
 	if velocity.length() < 1.0:
-		# Idle facing last movement
-		if abs(velocity.x) > abs(velocity.y):
-			sprite.play("idle_right" if velocity.x > 0 else "idle_left")
+		# Idle facing last movement direction
+		if last_direction.x > 0:
+			sprite.play("idle_right")
+		elif last_direction.x < 0:
+			sprite.play("idle_left")
+		elif last_direction.y > 0:
+			sprite.play("idle_down")
 		else:
-			sprite.play("idle_down" if velocity.y > 0 else "idle_down")
+			sprite.play("idle_top")
 	else:
-		# Walking animations
+		# Walking animations and update last direction
 		if abs(velocity.x) > abs(velocity.y):
-			sprite.play("walk_right" if velocity.x > 0 else "walk_left")
+			if velocity.x > 0:
+				sprite.play("walk_right")
+				last_direction = Vector2.RIGHT
+			else:
+				sprite.play("walk_left")
+				last_direction = Vector2.LEFT
 		else:
-			sprite.play("walk_down" if velocity.y > 0 else "walk_top")
+			if velocity.y > 0:
+				sprite.play("walk_down")
+				last_direction = Vector2.DOWN
+			else:
+				sprite.play("walk_top")
+				last_direction = Vector2.UP
 
-
-# ---------- Dialogue ----------
+# ---------- AI Dialogue ----------
 func _talk_to_player():
 	if busy_talking:
 		return
 	busy_talking = true
 
-	var response = "Hello, traveler!"
+	conversation_count += 1
+	
+	# Create context for the AI
+	var context = ""
+	if conversation_count == 1:
+		context = "A player just approached you for the first time. Greet them as a " + npc_personality + "."
+	else:
+		context = "This is the " + str(conversation_count) + " time talking to this player. Be a " + npc_personality + " and vary your response."
 
-	# Instance a speech bubble
-	var bubble_scene = preload("res://dialogue_box.tscn")
-	var bubble = bubble_scene.instantiate()
-	get_tree().current_scene.add_child(bubble)
-	bubble.show_message(response, self)
+	# Show "thinking" message while waiting for AI
+	_show_dialogue("...")
 
+	# Query the AI
+	if grok_api:
+		grok_api.query(context, _on_ai_response)
+	else:
+		# Fallback if no AI available
+		_on_ai_response("Hello, traveler!")
+
+func _on_ai_response(message: String):
+	# Replace the "thinking" bubble with actual response
+	_show_dialogue(message)
+	
 	# Cooldown before talking again
 	var timer := Timer.new()
-	timer.wait_time = 3.0
+	timer.wait_time = 4.0
 	timer.one_shot = true
 	add_child(timer)
 	timer.start()
@@ -102,3 +131,18 @@ func _talk_to_player():
 	timer.queue_free()
 
 	busy_talking = false
+
+func _show_dialogue(message: String):
+	# Remove any existing dialogue bubbles from this NPC
+	var existing_bubbles = get_tree().get_nodes_in_group("dialogue_bubbles")
+	for bubble in existing_bubbles:
+		if bubble.has_meta("npc_owner") and bubble.get_meta("npc_owner") == self:
+			bubble.queue_free()
+
+	# Instance a new speech bubble
+	var bubble_scene = preload("res://dialogue_box.tscn")
+	var bubble = bubble_scene.instantiate()
+	bubble.add_to_group("dialogue_bubbles")
+	bubble.set_meta("npc_owner", self)
+	get_tree().current_scene.add_child(bubble)
+	bubble.show_message(message, self)

@@ -8,10 +8,10 @@ var player : Node2D
 var player_icon : Sprite2D
 var loot_icons := []
 
-# Reference to main TileMap
+# Reference to main TileMapLayer
 @export var main_tilemap_path : NodePath
-var main_tilemap : TileMap
-var mini_tilemap : TileMap
+var main_tilemap : TileMapLayer
+var mini_tilemap : TileMapLayer
 
 # Scaling factor for minimap (used for TileMap, not icons anymore)
 @export var scale_factor : float = 0.25
@@ -32,15 +32,19 @@ func _ready():
 	player_icon.centered = true
 	mini_world.add_child(player_icon)
 	
-	# Get main TileMap and create minimap TileMap
-	if main_tilemap_path != NodePath(""):
-		main_tilemap = get_node_or_null(main_tilemap_path)
-		if main_tilemap:
-			print("Found main tilemap: ", main_tilemap.name)
-			print("Used cells: ", main_tilemap.get_used_cells(0).size())
-			create_minimap_tilemap()
-		else:
-			print("Failed to find main tilemap at path: ", main_tilemap_path)
+	# Find the TileMapLayer in the current scene tree
+	# This will search the entire tree for a TileMapLayer
+	main_tilemap = get_tree().get_first_node_in_group("Player")
+	if not main_tilemap:
+		# Fallback: search by node type
+		main_tilemap = get_tree().root.find_child("TileMapLayer", true, false)
+	
+	if main_tilemap:
+		print("Found main tilemap: ", main_tilemap.name)
+		print("Used cells: ", main_tilemap.get_used_cells().size())
+		create_minimap_tilemap()
+	else:
+		print("Could not find TileMapLayer in scene tree")
 
 func _process(delta: float) -> void:
 	if not player or not minimap_camera or not visible:
@@ -58,9 +62,9 @@ func _process(delta: float) -> void:
 		if is_instance_valid(loot_node):
 			icon_data["icon"].global_position = loot_node.global_position
 
-# Create a lightweight TileMap referencing the main TileMap data
+# Create a lightweight TileMapLayer referencing the main TileMapLayer data
 func create_minimap_tilemap():
-	mini_tilemap = TileMap.new()
+	mini_tilemap = TileMapLayer.new()
 	mini_tilemap.tile_set = main_tilemap.tile_set  # reference same TileSet
 	# Don't scale cell_size, scale the whole tilemap instead
 	mini_tilemap.scale = Vector2(scale_factor, scale_factor)
@@ -70,7 +74,7 @@ func create_minimap_tilemap():
 	# Initial copy of all cells
 	update_minimap()
 
-# Update minimap cells from main TileMap
+# Update minimap cells from main TileMapLayer
 func update_minimap():
 	if not main_tilemap or not mini_tilemap:
 		return
@@ -78,13 +82,13 @@ func update_minimap():
 	mini_tilemap.clear()
 	
 	# Make sure we're copying all tile data properly
-	for cell in main_tilemap.get_used_cells(0):
-		var source_id = main_tilemap.get_cell_source_id(0, cell)
-		var atlas_coords = main_tilemap.get_cell_atlas_coords(0, cell)
-		var alternative_tile = main_tilemap.get_cell_alternative_tile(0, cell)
+	for cell in main_tilemap.get_used_cells():
+		var source_id = main_tilemap.get_cell_source_id(cell)
+		var atlas_coords = main_tilemap.get_cell_atlas_coords(cell)
+		var alternative_tile = main_tilemap.get_cell_alternative_tile(cell)
 		
 		if source_id != -1:
-			mini_tilemap.set_cell(0, cell, source_id, atlas_coords, alternative_tile)
+			mini_tilemap.set_cell(cell, source_id, atlas_coords, alternative_tile)
 
 # Call this whenever main TileMap changes
 func refresh_minimap():
