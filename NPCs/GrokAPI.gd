@@ -1,6 +1,6 @@
 extends Node
 
-@export var openai_api_key: String = "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"  # Put your key here
+@export var openai_api_key: String = "xai-v5rzwoC6KgL4VyQQh3GHBHd1qgWcBZjd5jsygVsyK2TuVdD2s9u5dTMYdjCOBs1dMrWZ7l1AFLYDAmdg"  # Put your key here
 @export var model: String = "grok-beta"
 
 var http_request: HTTPRequest

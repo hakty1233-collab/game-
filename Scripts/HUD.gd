@@ -307,11 +307,22 @@ func _load_inventory() -> void:
 			slot.size_flags_horizontal = Control.SIZE_FILL
 			slot.size_flags_vertical = Control.SIZE_FILL
 			slot.custom_minimum_size = Vector2(64, 64)
+			
+			# Connect to tool equip signals if this slot supports it
+			if slot.has_signal("tool_equipped"):
+				slot.tool_equipped.connect(_on_tool_equipped)
+			
 			inv_grid.add_child(slot)
 		else:
 			var lbl := Label.new()
 			lbl.text = "%s x%d" % [String(item.get("name","?")), int(item.get("quantity",1))]
 			inv_grid.add_child(lbl)
+
+# Handle tool equipping from inventory slots
+func _on_tool_equipped(tool_name: String, skill: String) -> void:
+	print("[HUD] Tool equipped: %s for %s" % [tool_name, skill])
+	# Refresh inventory to show updated quantities
+	_load_inventory()
 
 # ---------- Map ----------
 func _open_map() -> void:
@@ -330,6 +341,4 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("load_game"):
 		if Autoload.load_game():
 			print("[HUD] Loaded.")
-	ToolBelt.equip_tool("Woodcutting","Bronze Axe") 
-	ToolBelt.equip_tool("Fishing","Basic Rod") 
-	ToolBelt.equip_tool("Mining","Bronze Pickaxe")
+	# Removed auto-equip lines - players now click tools to equip them!

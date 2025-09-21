@@ -1,8 +1,9 @@
-[gd_scene load_steps=54 format=3 uid="uid://cmcsv4tbgc773"]
+[gd_scene load_steps=56 format=3 uid="uid://cmcsv4tbgc773"]
 
 [ext_resource type="Script" uid="uid://d4elps7xmsbnr" path="res://npc.gd" id="1_0ikh5"]
 [ext_resource type="Texture2D" uid="uid://c7dm3ahn37fir" path="res://Character/Player.png" id="2_k7mck"]
 [ext_resource type="Texture2D" uid="uid://ce33mb5obocqo" path="res://Character/Player_left.png" id="3_k5705"]
+[ext_resource type="Script" uid="uid://b36uapa1jf05k" path="res://NPCs/npc_area.gd" id="4_k5705"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xlwy1"]
 atlas = ExtResource("2_k7mck")
@@ -386,6 +387,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vxakg"]
 size = Vector2(32, 46)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k5705"]
+size = Vector2(32, 45)
+
 [node name="NPC" type="CharacterBody2D"]
 script = ExtResource("1_0ikh5")
 
@@ -401,3 +405,8 @@ shape = SubResource("RectangleShape2D_vxakg")
 
 [node name="Area2D" type="Area2D" parent="CollisionShape2D"]
 position = Vector2(-38, -38)
+script = ExtResource("4_k5705")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionShape2D/Area2D"]
+position = Vector2(38, 37.5)
+shape = SubResource("RectangleShape2D_k5705")

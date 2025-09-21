@@ -13,6 +13,7 @@ func _ready() -> void:
 	add_to_group("player")
 	$InteractArea.connect("area_entered", _on_area_entered)
 	$InteractArea.connect("area_exited", _on_area_exited)
+	print("[Player] Player ready, InteractArea connected")
 
 func _physics_process(_delta: float) -> void:
 	if is_busy:
@@ -42,24 +43,43 @@ func _physics_process(_delta: float) -> void:
 
 # ---------- Area detection ----------
 func _on_area_entered(area: Area2D) -> void:
+	print("[Player] Area entered: ", area.get_path())
 	if area.has_method("on_interact"):
+		print("[Player] Area has on_interact method - setting as nearby_object")
 		nearby_object = area
+	else:
+		print("[Player] Area does not have on_interact method")
 
 func _on_area_exited(area: Area2D) -> void:
+	print("[Player] Area exited: ", area.get_path())
 	if nearby_object == area:
 		nearby_object = null
+		print("[Player] Cleared nearby_object")
 
 # ---------- Input ----------
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact") and nearby_object != null and !is_busy:
-		if _is_tree(nearby_object):
-			call_deferred("_do_activity", nearby_object, "chop")
-		elif _is_mineable(nearby_object):
-			call_deferred("_do_activity", nearby_object, "mine")
-		elif _is_fishable(nearby_object):
-			call_deferred("_do_activity", nearby_object, "fish")
-		elif nearby_object.has_method("on_interact"):
-			nearby_object.on_interact()
+	if event.is_action_pressed("interact"):
+		print("[Player] Interact pressed! Nearby object: ", nearby_object)
+		if nearby_object != null and !is_busy:
+			print("[Player] Processing interaction...")
+			if _is_tree(nearby_object):
+				print("[Player] Interacting with tree")
+				call_deferred("_do_activity", nearby_object, "chop")
+			elif _is_mineable(nearby_object):
+				print("[Player] Interacting with mineable")
+				call_deferred("_do_activity", nearby_object, "mine")
+			elif _is_fishable(nearby_object):
+				print("[Player] Interacting with fishable")
+				call_deferred("_do_activity", nearby_object, "fish")
+			elif nearby_object.has_method("on_interact"):
+				print("[Player] Calling on_interact on: ", nearby_object.get_path())
+				nearby_object.on_interact()
+			else:
+				print("[Player] Nearby object has no interaction method")
+		elif nearby_object == null:
+			print("[Player] No nearby object to interact with")
+		elif is_busy:
+			print("[Player] Player is busy, can't interact")
 
 # ---------- Activity checks ----------
 func _is_tree(node: Node) -> bool:
