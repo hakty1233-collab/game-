@@ -1,0 +1,139 @@
+[gd_scene load_steps=24 format=3 uid="uid://cc2axplht8my4"]
+
+[ext_resource type="Script" uid="uid://03ns0fx8inek" path="res://Loading screen/load_screen.gd" id="1_57isp"]
+[ext_resource type="Texture2D" uid="uid://b7p31mn6trmov" path="res://Loading screen/Art/otter_sleep_1.png" id="2_4mvio"]
+[ext_resource type="Texture2D" uid="uid://b75g3ivdql3tv" path="res://Loading screen/Art/otter_sleep_2.png" id="3_scslt"]
+[ext_resource type="Texture2D" uid="uid://b3e8gmsyt24my" path="res://Loading screen/Art/otter_sleep_3.png" id="4_cthrx"]
+[ext_resource type="Texture2D" uid="uid://ckr8wkxe0gcl7" path="res://Loading screen/Art/otter_sleep_4.png" id="5_khrt1"]
+[ext_resource type="Texture2D" uid="uid://dvwtj5qaikiky" path="res://Loading screen/Art/otter_sleep_5.png" id="6_3m8xg"]
+[ext_resource type="Texture2D" uid="uid://cdjobngoeg51x" path="res://Loading screen/Art/otter_sleep_6.png" id="7_uuycw"]
+[ext_resource type="FontFile" uid="uid://ci5cj6n6rw2es" path="res://Main Menu/Fonts/FantasyRPGtext (size 8).ttf" id="8_1n58g"]
+[ext_resource type="Texture2D" uid="uid://baogm35mtihuj" path="res://Loading screen/Art/otter_idle_1.png" id="8_xnax7"]
+[ext_resource type="Texture2D" uid="uid://dw7dceja1r6dx" path="res://Loading screen/Art/otter_idle_2.png" id="9_b2iyd"]
+[ext_resource type="Texture2D" uid="uid://b53il1h2bi8hk" path="res://Loading screen/Art/otter_idle_3.png" id="10_wx6k5"]
+[ext_resource type="Texture2D" uid="uid://bceocv51a8x7b" path="res://Loading screen/Art/otter_idle_4.png" id="11_1fn83"]
+[ext_resource type="Texture2D" uid="uid://d4l88drvg75g8" path="res://Loading screen/Art/otter_idle_alt_1.png" id="12_yjuhl"]
+[ext_resource type="Texture2D" uid="uid://bgah7dtoblabj" path="res://Loading screen/Art/otter_idle_alt_2.png" id="13_fh1da"]
+[ext_resource type="Texture2D" uid="uid://c0rc4rx3gv4a" path="res://Loading screen/Art/otter_idle_alt_3.png" id="14_77xv0"]
+[ext_resource type="Texture2D" uid="uid://dk66y6law51sp" path="res://Loading screen/Art/otter_idle_alt_4.png" id="15_wbylk"]
+[ext_resource type="Texture2D" uid="uid://djswixfvx6wjy" path="res://Loading screen/Art/otter_land_1.png" id="16_ab8ui"]
+[ext_resource type="Texture2D" uid="uid://bxbc2llp1k3od" path="res://Loading screen/Art/otter_land_2.png" id="17_8bs48"]
+[ext_resource type="Texture2D" uid="uid://rj4bl67jqrdk" path="res://Loading screen/Art/otter_land_3.png" id="18_ixbgu"]
+[ext_resource type="Texture2D" uid="uid://bpd4nsm8i84vm" path="res://Loading screen/Art/otter_run_1.png" id="19_b028f"]
+[ext_resource type="Texture2D" uid="uid://dt34qa1otfrwu" path="res://Loading screen/Art/otter_run_2.png" id="20_yis4n"]
+[ext_resource type="Texture2D" uid="uid://dq50nu8dc546w" path="res://Loading screen/Art/otter_run_3.png" id="21_gv6y3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wmwcn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_4mvio")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_scslt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_cthrx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_khrt1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_3m8xg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_uuycw")
+}],
+"loop": true,
+"name": &"Otter_sleep",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_xnax7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_b2iyd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_wx6k5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_1fn83")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_yjuhl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_fh1da")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_77xv0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_wbylk")
+}],
+"loop": true,
+"name": &"Otter_stand",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_ab8ui")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_8bs48")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_ixbgu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_b028f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_yis4n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_gv6y3")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]
+
+[node name="Load Screen" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_57isp")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1916.0
+offset_bottom = 1077.0
+color = Color(0, 0, 0, 1)
+
+[node name="Otter" type="AnimatedSprite2D" parent="."]
+position = Vector2(1815, 980)
+sprite_frames = SubResource("SpriteFrames_wmwcn")
+animation = &"Otter_stand"
+autoplay = "Otter_sleep"
+frame_progress = 0.0233516
+
+[node name="LoadingLabel" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 22.0
+offset_top = 1012.0
+offset_right = 241.0
+offset_bottom = 1072.0
+theme_override_fonts/font = ExtResource("8_1n58g")
+theme_override_font_sizes/font_size = 50
+text = "Loading..."
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 1017.0
+offset_right = 1739.0
+offset_bottom = 1050.0
+theme_override_fonts/font = ExtResource("8_1n58g")

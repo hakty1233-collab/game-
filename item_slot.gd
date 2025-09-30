@@ -13,30 +13,21 @@ var ICONS: Dictionary = {
 	"plank": preload("res://UI/Items/plank.png"),
 	"copper_ore": preload("res://UI/Items/copper_ore.png"),
 	
-	# Tools - add these icons (using placeholders for now)
+	# Add tool icons (using placeholders for now)
 	"bronze_axe": preload("res://UI/Items/fishing_rod.png"),       # placeholder
-	"iron_axe": preload("res://UI/Items/fishing_rod.png"),         # placeholder
 	"basic_rod": preload("res://UI/Items/fishing_rod.png"),   # placeholder
-	"advanced_rod": preload("res://UI/Items/fishing_rod.png"), # placeholder
-	"bronze_pickaxe": preload("res://UI/Items/fishing_rod.png"), # placeholder
-	"iron_pickaxe": preload("res://UI/Items/fishing_rod.png")    # placeholder
+	"bronze_pickaxe": preload("res://UI/Items/fishing_rod.png")  # placeholder
 }
 
 # Tool to skill mapping
 var TOOL_SKILLS: Dictionary = {
 	"bronze_axe": "Woodcutting",
-	"iron_axe": "Woodcutting", 
-	"steel_axe": "Woodcutting",
-	"basic_rod": "Fishing",
+	"iron_axe": "Woodcutting",
+	"basic_rod": "Fishing", 
 	"advanced_rod": "Fishing",
-	"master_rod": "Fishing", 
 	"bronze_pickaxe": "Mining",
-	"iron_pickaxe": "Mining",
-	"steel_pickaxe": "Mining"
+	"iron_pickaxe": "Mining"
 }
-
-# ---------- Signals ----------
-signal tool_equipped(tool_name: String, skill: String)
 
 # ---------- Helpers ----------
 func normalize_name(name: String) -> String:
@@ -122,14 +113,15 @@ func _on_item_clicked():
 	# Check if this is a tool
 	if is_tool(item_name):
 		_try_equip_tool(item_name)
-	else:
-		print("[ItemSlot] Item is not a tool")
 
 func _try_equip_tool(tool_name: String):
 	var skill = get_tool_skill(tool_name)
 	if skill == "":
 		print("[ItemSlot] Unknown skill for tool: %s" % tool_name)
 		return
+	
+	print("[ItemSlot] === EQUIPPING TOOL ===")
+	print("[ItemSlot] Tool: %s, Skill: %s" % [tool_name, skill])
 	
 	# Check if we have this tool in inventory
 	var has_tool = PlayerInventory.has_at_least(tool_name, 1)
@@ -140,29 +132,30 @@ func _try_equip_tool(tool_name: String):
 	# Remove tool from inventory
 	var removed = PlayerInventory.remove_item(tool_name, 1)
 	if removed > 0:
+		print("[ItemSlot] Removed %d %s from inventory" % [removed, tool_name])
+		
 		# Equip the tool
 		ToolBelt.equip_tool(skill, tool_name)
-		tool_equipped.emit(tool_name, skill)
+		print("[ItemSlot] Called ToolBelt.equip_tool(%s, %s)" % [skill, tool_name])
+		print("[ItemSlot] ToolBelt.slots after equip: ", ToolBelt.slots)
 		
 		# Show feedback
-		_show_equip_feedback(tool_name, skill)
-		
 		print("[ItemSlot] Equipped %s for %s skill" % [tool_name, skill])
+		_show_equip_feedback(tool_name)
 	else:
 		print("[ItemSlot] Failed to remove tool from inventory")
 
-func _show_equip_feedback(tool_name: String, skill: String):
-	# Create floating text
+func _show_equip_feedback(tool_name: String):
+	# Create floating "Equipped!" text
 	var feedback_label = Label.new()
-	feedback_label.text = "Equipped %s!" % tool_name
+	feedback_label.text = "Equipped!"
 	feedback_label.modulate = Color.GREEN
 	feedback_label.z_index = 100
 	feedback_label.position = global_position + Vector2(0, -20)
 	
-	# Add to scene tree
 	get_tree().current_scene.add_child(feedback_label)
 	
-	# Animate
+	# Animate the feedback
 	var tween = create_tween()
 	tween.parallel().tween_property(feedback_label, "position:y", feedback_label.position.y - 30, 1.0)
 	tween.parallel().tween_property(feedback_label, "modulate:a", 0.0, 1.0)
@@ -171,9 +164,10 @@ func _show_equip_feedback(tool_name: String, skill: String):
 # ---------- Visual feedback ----------
 func _on_mouse_entered():
 	if not item.is_empty():
-		modulate = Color(1.2, 1.2, 1.2)  # Brighten on hover
 		if is_tool(String(item.get("name", ""))):
 			modulate = Color(1.2, 1.5, 1.2)  # Green tint for tools
+		else:
+			modulate = Color(1.2, 1.2, 1.2)  # Normal brighten
 
 func _on_mouse_exited():
 	modulate = Color.WHITE

@@ -61,6 +61,10 @@ func _ready() -> void:
 	# Auto-refresh inventory when items change
 	if PlayerInventory.has_signal("inventory_changed"):
 		PlayerInventory.inventory_changed.connect(_load_inventory)
+	
+	# Auto-refresh inventory when toolbelt changes (tools equipped/unequipped)
+	if ToolBelt.has_signal("belt_changed"):
+		ToolBelt.belt_changed.connect(_on_toolbelt_changed)
 
 	# Layout base
 	skills_panel.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -86,6 +90,7 @@ func _ready() -> void:
 
 	_load_inventory()
 	_update_total_level()
+	_setup_toolbelt_display()  # Setup visual toolbelt
 
 	# Make panels draggable
 	_make_panel_draggable(skills_panel)
@@ -307,22 +312,151 @@ func _load_inventory() -> void:
 			slot.size_flags_horizontal = Control.SIZE_FILL
 			slot.size_flags_vertical = Control.SIZE_FILL
 			slot.custom_minimum_size = Vector2(64, 64)
-			
-			# Connect to tool equip signals if this slot supports it
-			if slot.has_signal("tool_equipped"):
-				slot.tool_equipped.connect(_on_tool_equipped)
-			
 			inv_grid.add_child(slot)
 		else:
 			var lbl := Label.new()
 			lbl.text = "%s x%d" % [String(item.get("name","?")), int(item.get("quantity",1))]
 			inv_grid.add_child(lbl)
 
-# Handle tool equipping from inventory slots
-func _on_tool_equipped(tool_name: String, skill: String) -> void:
-	print("[HUD] Tool equipped: %s for %s" % [tool_name, skill])
+# Handle toolbelt changes (tools equipped)
+func _on_toolbelt_changed(skill: String, tool_id: String):
+	print("[HUD] Toolbelt changed: %s equipped %s" % [skill, tool_id])
 	# Refresh inventory to show updated quantities
 	_load_inventory()
+	# Refresh toolbelt display
+	_update_toolbelt_display()
+
+# ---------- ToolBelt Display (NEW) ----------
+func _setup_toolbelt_display():
+	if not toolbelt_panel:
+		print("[HUD] No toolbelt panel found")
+		return
+	
+	# Clear existing content
+	_clear_toolbelt_display()
+	
+	# Create or get grid container
+	var toolbelt_grid = toolbelt_panel.get_node_or_null("GridContainer")
+	if not toolbelt_grid:
+		toolbelt_grid = GridContainer.new()
+		toolbelt_grid.name = "GridContainer"
+		toolbelt_grid.columns = 1  # Vertical layout
+		toolbelt_grid.add_theme_constant_override("v_separation", 10)
+		toolbelt_panel.add_child(toolbelt_grid)
+	
+	# Create slots for each skill
+	var skills = ["Woodcutting", "Fishing", "Mining"]
+	var slot_scene = _slot_scene()
+	
+	for skill in skills:
+		var slot_container = VBoxContainer.new()
+		slot_container.custom_minimum_size = Vector2(80, 80)
+		
+		# Skill label
+		var skill_label = Label.new()
+		skill_label.text = skill
+		skill_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		skill_label.add_theme_font_size_override("font_size", 10)
+		slot_container.add_child(skill_label)
+		
+		# Tool slot
+		var slot = null
+		if slot_scene:
+			slot = slot_scene.instantiate()
+		else:
+			# Create basic slot
+			slot = Control.new()
+			var panel = Panel.new()
+			panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			slot.add_child(panel)
+			var icon = TextureRect.new()
+			icon.name = "Icon"
+			icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			icon.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+			icon.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+			panel.add_child(icon)
+		
+		slot.custom_minimum_size = Vector2(64, 64)
+		slot.size_flags_horizontal = Control.SIZE_FILL
+		slot.size_flags_vertical = Control.SIZE_FILL
+		
+		# Store skill info on the slot
+		slot.set_meta("skill", skill)
+		
+		slot_container.add_child(slot)
+		toolbelt_grid.add_child(slot_container)
+	
+	# Initial update
+	_update_toolbelt_display()
+
+func _update_toolbelt_display():
+	if not toolbelt_panel:
+		print("[HUD] No toolbelt panel found")
+		return
+		
+	var toolbelt_grid = toolbelt_panel.get_node_or_null("GridContainer")
+	if not toolbelt_grid:
+		print("[HUD] No toolbelt grid found")
+		return
+	
+	print("[HUD] === UPDATING TOOLBELT DISPLAY ===")
+	print("[HUD] ToolBelt.slots: ", ToolBelt.slots)
+	
+	# Tool icons (same as inventory)
+	var TOOL_ICONS = {
+		"bronze_axe": preload("res://UI/Items/fishing_rod.png"),
+		"basic_rod": preload("res://UI/Items/fishing_rod.png"),
+		"bronze_pickaxe": preload("res://UI/Items/fishing_rod.png"),
+		"iron_axe": preload("res://UI/Items/fishing_rod.png"),
+		"advanced_rod": preload("res://UI/Items/fishing_rod.png"),
+		"iron_pickaxe": preload("res://UI/Items/fishing_rod.png")
+	}
+	
+	# Update each slot
+	for container in toolbelt_grid.get_children():
+		if not container is VBoxContainer:
+			continue
+			
+		# Find the slot (should be second child after label)
+		var slot = null
+		for child in container.get_children():
+			if child.has_meta("skill"):
+				slot = child
+				break
+		
+		if not slot:
+			print("[HUD] No slot found in container")
+			continue
+			
+		var skill = slot.get_meta("skill")
+		var equipped_tool = ToolBelt.slots.get(skill, null)
+		print("[HUD] Skill: %s, Equipped: %s" % [skill, equipped_tool])
+		
+		# Find icon node in slot
+		var icon_node = slot.find_child("Icon", true, false)
+		if not icon_node:
+			print("[HUD] No icon node found for skill: %s" % skill)
+			continue
+		
+		# Update icon
+		if equipped_tool and equipped_tool != "":
+			var tool_key = equipped_tool.to_lower().replace(" ", "_")
+			var icon = TOOL_ICONS.get(tool_key, null)
+			print("[HUD] Tool key: %s, Icon: %s" % [tool_key, icon])
+			icon_node.texture = icon
+			slot.tooltip_text = equipped_tool + "\n[" + skill + " Tool]"
+		else:
+			print("[HUD] No tool equipped for %s" % skill)
+			icon_node.texture = null
+			slot.tooltip_text = skill + "\n[Empty Slot]"
+
+func _clear_toolbelt_display():
+	if not toolbelt_panel:
+		return
+	var toolbelt_grid = toolbelt_panel.get_node_or_null("GridContainer")
+	if toolbelt_grid:
+		for child in toolbelt_grid.get_children():
+			child.queue_free()
 
 # ---------- Map ----------
 func _open_map() -> void:

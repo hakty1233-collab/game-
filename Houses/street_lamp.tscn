@@ -1,0 +1,183 @@
+[gd_scene load_steps=5 format=3 uid="uid://2hpeehmbuhc3"]
+
+[ext_resource type="Texture2D" uid="uid://b4k2gljnsm2vy" path="res://Mining/Outdoor_Decor_Free.png" id="2_duvk8"]
+
+[sub_resource type="GDScript" id="GDScript_127gs"]
+script/source = "extends Node2D
+class_name StreetLamp
+
+@export var lamp_sprite: Texture2D
+@export var warm_light_color: Color = Color(1.0, 0.7, 0.3, 1.0)  # Warm street lamp color
+@export var light_radius: float = 150.0
+@export var fade_duration: float = 3.0
+
+@onready var lamp_post: Sprite2D = $LampPost
+@onready var point_light: PointLight2D = $PointLight2D
+@onready var glow_sprite: Sprite2D = $GlowSprite
+
+var day_night_system: Node
+var is_lit: bool = false
+
+func _ready():
+	# Setup lamp post sprite
+	if lamp_sprite:
+		lamp_post.texture = lamp_sprite
+	
+	# Setup the PointLight2D
+	point_light.color = warm_light_color
+	point_light.energy = 0.0
+	point_light.texture_scale = light_radius / 20.0
+	
+	# Optional: Set a light texture for better appearance
+	# You can use Godot's built-in light textures or create your own
+	if not point_light.texture:
+		# Godot has some built-in light textures you can assign in the inspector
+		pass
+	
+	# Setup glow effect (optional visual enhancement)
+	glow_sprite.modulate = warm_light_color
+	glow_sprite.modulate.a = 0.0
+	glow_sprite.scale = Vector2(0.5, 0.5)
+	
+	# Connect to day/night cycle
+	_connect_to_day_night_cycle()
+
+func _connect_to_day_night_cycle():
+	# Connect to your CycleManager
+	day_night_system = get_node_or_null(\"/root/CycleManager\")
+	if not day_night_system:
+		# Try to find it elsewhere
+		day_night_system = get_tree().get_first_node_in_group(\"cycle_manager\")
+	
+	if day_night_system:
+		print(\"[StreetLamp] Connected to CycleManager\")
+		# Since your CycleManager doesn't emit signals, we'll check time in _process
+		set_process(true)
+	else:
+		print(\"[StreetLamp] Warning: No CycleManager found\")
+
+func _process(delta):
+	if not day_night_system:
+		return
+	
+	# Get current time from CycleManager (0.0 to 1.0)
+	var current_time = day_night_system.time
+	
+	# Convert to hour-like system (0.0 = midnight, 0.5 = noon)
+	# Night time: 0.0-0.25 (midnight to 6am) and 0.75-1.0 (6pm to midnight)
+	var should_be_lit = current_time <= 0.25 or current_time >= 0.75
+	
+	if should_be_lit and not is_lit:
+		turn_on()
+	elif not should_be_lit and is_lit:
+		turn_off()
+
+# Remove the old _on_time_changed function since we're using _process instead
+
+func turn_on():
+	if is_lit:
+		return
+		
+	is_lit = true
+	print(\"[StreetLamp] Turning on at position: \", global_position)
+	
+	var tween = create_tween()
+	tween.set_parallel(true)
+	
+	# Fade in the PointLight2D
+	tween.tween_property(point_light, \"energy\", 1.0, fade_duration)
+	
+	# Fade in the glow effect
+	tween.tween_property(glow_sprite, \"modulate:a\", 0.4, fade_duration)
+	tween.tween_property(glow_sprite, \"scale\", Vector2(1.0, 1.0), fade_duration)
+	
+	# Optional: slight flickering effect when turning on
+	tween.tween_callback(_add_flicker_effect).set_delay(fade_duration + 1.0)
+
+func turn_off():
+	if not is_lit:
+		return
+		
+	is_lit = false
+	print(\"[StreetLamp] Turning off at position: \", global_position)
+	
+	var tween = create_tween()
+	tween.set_parallel(true)
+	
+	# Fade out the PointLight2D
+	tween.tween_property(point_light, \"energy\", 0.0, fade_duration)
+	
+	# Fade out the glow effect
+	tween.tween_property(glow_sprite, \"modulate:a\", 0.0, fade_duration)
+	tween.tween_property(glow_sprite, \"scale\", Vector2(0.5, 0.5), fade_duration)
+
+func _add_flicker_effect():
+	if not is_lit:
+		return
+		
+	# Subtle random flicker
+	var flicker_tween = create_tween()
+	var base_energy = 1.0
+	var flicker_intensity = 0.15
+	
+	# Quick flicker down and back up
+	flicker_tween.tween_property(point_light, \"energy\", 
+		base_energy - flicker_intensity, 0.1)
+	flicker_tween.tween_property(point_light, \"energy\", base_energy, 0.2)
+	
+	# Schedule next flicker randomly
+	var next_flicker_time = randf_range(5.0, 15.0)
+	flicker_tween.tween_callback(_add_flicker_effect).set_delay(next_flicker_time)
+
+func toggle():
+	if is_lit:
+		turn_off()
+	else:
+		turn_on()
+
+# Debug function to see what time the CycleManager thinks it is
+func get_current_cycle_time() -> String:
+	if not day_night_system:
+		return \"No CycleManager found\"
+	
+	var current_time = day_night_system.time
+	var time_of_day = \"\"
+	
+	if current_time <= 0.25:
+		time_of_day = \"Night (Early)\"
+	elif current_time <= 0.5:
+		time_of_day = \"Day (Morning/Midday)\"
+	elif current_time <= 0.75:
+		time_of_day = \"Day (Afternoon)\"
+	else:
+		time_of_day = \"Night (Evening)\"
+	
+	return \"Time: %.2f - %s - Lamp: %s\" % [current_time, time_of_day, \"ON\" if is_lit else \"OFF\"]
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oiql2"]
+atlas = ExtResource("2_duvk8")
+region = Rect2(64, 64, 16, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gfy4g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oiql2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="streetLamp" type="Node2D"]
+script = SubResource("GDScript_127gs")
+
+[node name="LampPost" type="Sprite2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_gfy4g")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+
+[node name="GlowSprite" type="Sprite2D" parent="."]

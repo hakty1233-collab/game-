@@ -78,8 +78,8 @@ columns = 6
 
 [node name="ToolBeltUI" type="PanelContainer" parent="CanvasLayer/MainHUD" groups=["toolbelt"]]
 layout_mode = 0
-offset_left = 688.0
-offset_top = 497.0
+offset_left = 750.0
+offset_top = 259.0
 offset_right = 873.0
 offset_bottom = 550.0
 script = ExtResource("5_8nmcf")

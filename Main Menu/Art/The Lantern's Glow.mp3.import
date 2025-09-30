@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ck7mnp1q4sq1d"
+path="res://.godot/imported/The Lantern's Glow.mp3-6f486b2ff0471b4ea174c8a69e43d1fe.mp3str"
+
+[deps]
+
+source_file="res://Main Menu/Art/The Lantern's Glow.mp3"
+dest_files=["res://.godot/imported/The Lantern's Glow.mp3-6f486b2ff0471b4ea174c8a69e43d1fe.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
