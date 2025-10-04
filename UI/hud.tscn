@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bomq3oewmchp5"]
+[gd_scene load_steps=18 format=3 uid="uid://bomq3oewmchp5"]
 
 [ext_resource type="Script" uid="uid://1f4tndyy64d3" path="res://Scripts/HUD.gd" id="1_vs5gg"]
 [ext_resource type="Texture2D" uid="uid://dgs6mq8pxw7k4" path="res://UI/Art/9-panel.png" id="2_23s3h"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bl70lj3cn8lwd" path="res://Systems/xp_popup.tscn" id="7_0j753"]
 [ext_resource type="PackedScene" uid="uid://c6dgjat0en4ga" path="res://dialogue_box.tscn" id="7_phrgc"]
 [ext_resource type="Texture2D" uid="uid://djj7todv45x2e" path="res://UI/Items/chest.png" id="9_sab3h"]
+[ext_resource type="PackedScene" uid="uid://byee2b3qpbaa0" path="res://NPCs/Shop/shop_ui.tscn" id="9_vdnig"]
 [ext_resource type="Texture2D" uid="uid://343rmranf3hr" path="res://UI/Items/fb75.png" id="10_vdnig"]
 [ext_resource type="Texture2D" uid="uid://cxcqfnlytslmo" path="res://UI/Items/Map.png" id="12_pueji"]
 
@@ -125,10 +126,10 @@ offset_bottom = 277.0
 
 [node name="CraftingUI" parent="CanvasLayer/MainHUD" instance=ExtResource("5_vs5gg")]
 layout_mode = 1
-offset_left = 432.0
-offset_top = 298.0
-offset_right = 432.0
-offset_bottom = 298.0
+offset_left = 556.0
+offset_top = -54.0
+offset_right = 556.0
+offset_bottom = -54.0
 
 [node name="DialogueBox" parent="CanvasLayer/MainHUD" groups=["DialogueUI"] instance=ExtResource("7_phrgc")]
 visible = false
@@ -136,6 +137,12 @@ offset_left = 725.0
 offset_top = 232.0
 offset_right = 725.0
 offset_bottom = 232.0
+
+[node name="ShopUI" parent="CanvasLayer" groups=["shop_ui"] instance=ExtResource("9_vdnig")]
+offset_left = 751.0
+offset_top = 149.0
+offset_right = 751.0
+offset_bottom = 149.0
 
 [node name="FloatingLabels" type="Control" parent="CanvasLayer"]
 layout_mode = 3
@@ -199,7 +206,7 @@ offset_right = -402.0
 offset_bottom = -13.0
 
 [node name="XP_Popup" parent="CanvasLayer" instance=ExtResource("7_0j753")]
-offset_left = 469.0
-offset_top = 190.0
-offset_right = -516.0
-offset_bottom = -300.0
+offset_left = 895.0
+offset_top = 149.0
+offset_right = -872.0
+offset_bottom = -825.0

@@ -3,7 +3,7 @@ extends Node
 
 @export var day_length: float = 600.0  # full day in seconds
 
-var time: float = 0.0
+var time: float = 60.0
 var overlay: CanvasModulate = null
 
 var times: Array[float] = [0.0, 0.2, 0.35, 0.5, 0.7, 0.85, 1.0]

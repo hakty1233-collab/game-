@@ -6,9 +6,9 @@ extends Area2D
 
 # Preload textures for different station types
 const STATION_TEXTURES := {
-	"Oven": preload("res://UI/Icons/otteria_skill_icons.png"),
+	"Oven": preload("res://UI/Art/Oven.png"),
 	"Forge": preload("res://UI/Art/Forge.png"),
-	"Workbench": preload("res://UI/Icons/otteria_skill_icons.png")
+	"Workbench": preload("res://UI/Art/Workbench.png")
 }
 
 func _ready() -> void:

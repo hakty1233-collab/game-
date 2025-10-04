@@ -1,0 +1,235 @@
+[gd_scene load_steps=46 format=3 uid="uid://b2gmerpoyrncv"]
+
+[ext_resource type="Script" uid="uid://bdhjetwd2d855" path="res://NPCs/vendor_npc.gd" id="1_dbjhl"]
+[ext_resource type="Texture2D" uid="uid://vvlo2gplv76g" path="res://Character/Test/NPC/Idle/s/frame_000.png" id="2_jgosx"]
+[ext_resource type="Texture2D" uid="uid://b27hm5ol8onhw" path="res://Character/Test/NPC/Idle/s/frame_001.png" id="3_toexf"]
+[ext_resource type="Script" uid="uid://b36uapa1jf05k" path="res://NPCs/npc_area.gd" id="4_vt2bs"]
+[ext_resource type="Texture2D" uid="uid://b3sxget2nqsqf" path="res://Character/Test/NPC/Idle/s/frame_002.png" id="4_yq07q"]
+[ext_resource type="Texture2D" uid="uid://de15dhbj5l0bm" path="res://Character/Test/NPC/Idle/s/frame_003.png" id="5_uancq"]
+[ext_resource type="Texture2D" uid="uid://bn3kx0xyj0h6u" path="res://Character/Test/NPC/Idle/w/frame_000.png" id="6_31qak"]
+[ext_resource type="Texture2D" uid="uid://d0m6rs2wek5lg" path="res://Character/Test/NPC/Idle/w/frame_001.png" id="7_308ai"]
+[ext_resource type="Texture2D" uid="uid://cl07x2ef82rwl" path="res://Character/Test/NPC/Idle/w/frame_002.png" id="8_p74lg"]
+[ext_resource type="Texture2D" uid="uid://bsjd87kujnaqs" path="res://Character/Test/NPC/Idle/w/frame_003.png" id="9_g07y7"]
+[ext_resource type="Texture2D" uid="uid://btc6g7c2ti7yh" path="res://Character/Test/NPC/Idle/e/frame_000.png" id="10_igs1f"]
+[ext_resource type="Texture2D" uid="uid://hfc3ekpd4s0r" path="res://Character/Test/NPC/Idle/e/frame_001.png" id="11_ryvti"]
+[ext_resource type="Texture2D" uid="uid://ddctihgk5tj76" path="res://Character/Test/NPC/Idle/e/frame_002.png" id="12_djjng"]
+[ext_resource type="Texture2D" uid="uid://bk4f3arqk7m27" path="res://Character/Test/NPC/Idle/e/frame_003.png" id="13_p7nkx"]
+[ext_resource type="Texture2D" uid="uid://cgi2f8qfc3e8i" path="res://Character/Test/NPC/Idle/n/frame_000.png" id="14_2phv4"]
+[ext_resource type="Texture2D" uid="uid://bpwye13kxudfe" path="res://Character/Test/NPC/Idle/n/frame_001.png" id="15_g4lvt"]
+[ext_resource type="Texture2D" uid="uid://d3ei4vkcuolmw" path="res://Character/Test/NPC/Idle/n/frame_002.png" id="16_kpubm"]
+[ext_resource type="Texture2D" uid="uid://vgra6ajl0kyv" path="res://Character/Test/NPC/Idle/n/frame_003.png" id="17_013fb"]
+[ext_resource type="Texture2D" uid="uid://dv658m83p5guy" path="res://Character/Test/NPC/walk/s/frame_000.png" id="18_yge5h"]
+[ext_resource type="Texture2D" uid="uid://6t4qdr04h2bi" path="res://Character/Test/NPC/walk/s/frame_001.png" id="19_6jhkj"]
+[ext_resource type="Texture2D" uid="uid://btyddq23aulq4" path="res://Character/Test/NPC/walk/s/frame_002.png" id="20_3740e"]
+[ext_resource type="Texture2D" uid="uid://d1hsltiwc4w74" path="res://Character/Test/NPC/walk/s/frame_003.png" id="21_c2e6o"]
+[ext_resource type="Texture2D" uid="uid://d24nmprxxhysn" path="res://Character/Test/NPC/walk/s/frame_004.png" id="22_cgxjd"]
+[ext_resource type="Texture2D" uid="uid://35ewt70s501s" path="res://Character/Test/NPC/walk/s/frame_005.png" id="23_y4i5w"]
+[ext_resource type="Texture2D" uid="uid://c3span4rtjhct" path="res://Character/Test/NPC/walk/w/frame_000.png" id="24_h7eg1"]
+[ext_resource type="Texture2D" uid="uid://v8mmbupqafik" path="res://Character/Test/NPC/walk/w/frame_001.png" id="25_my8st"]
+[ext_resource type="Texture2D" uid="uid://bcewvlykojbhp" path="res://Character/Test/NPC/walk/w/frame_002.png" id="26_07k1m"]
+[ext_resource type="Texture2D" uid="uid://bf5fp3diqokyc" path="res://Character/Test/NPC/walk/w/frame_003.png" id="27_owxso"]
+[ext_resource type="Texture2D" uid="uid://cf8bxnios0vyv" path="res://Character/Test/NPC/walk/w/frame_004.png" id="28_5s5x5"]
+[ext_resource type="Texture2D" uid="uid://dso62oscu0jpk" path="res://Character/Test/NPC/walk/w/frame_005.png" id="29_45c1a"]
+[ext_resource type="Texture2D" uid="uid://b58wirdfcqj2h" path="res://Character/Test/NPC/walk/e/frame_000.png" id="30_nb0cj"]
+[ext_resource type="Texture2D" uid="uid://vumbv8ggooeg" path="res://Character/Test/NPC/walk/e/frame_001.png" id="31_amkhh"]
+[ext_resource type="Texture2D" uid="uid://bwpmaq302cqay" path="res://Character/Test/NPC/walk/e/frame_002.png" id="32_rsu48"]
+[ext_resource type="Texture2D" uid="uid://mkwjty6jlrkp" path="res://Character/Test/NPC/walk/e/frame_003.png" id="33_5wo74"]
+[ext_resource type="Texture2D" uid="uid://b4vrlqyr2plpp" path="res://Character/Test/NPC/walk/e/frame_004.png" id="34_lfu46"]
+[ext_resource type="Texture2D" uid="uid://dxvohpyemeub" path="res://Character/Test/NPC/walk/e/frame_005.png" id="35_lj12u"]
+[ext_resource type="Texture2D" uid="uid://cfkckj2mxlkko" path="res://Character/Test/NPC/walk/n/frame_000.png" id="36_vp7on"]
+[ext_resource type="Texture2D" uid="uid://ba53fyvps0des" path="res://Character/Test/NPC/walk/n/frame_001.png" id="37_0ckvb"]
+[ext_resource type="Texture2D" uid="uid://dys0k0glpg20w" path="res://Character/Test/NPC/walk/n/frame_002.png" id="38_1pauq"]
+[ext_resource type="Texture2D" uid="uid://lkuendhn7wer" path="res://Character/Test/NPC/walk/n/frame_003.png" id="39_encf8"]
+[ext_resource type="Texture2D" uid="uid://c6n726kli7ui3" path="res://Character/Test/NPC/walk/n/frame_004.png" id="40_7y7u5"]
+[ext_resource type="Texture2D" uid="uid://bpg02ttt2wi56" path="res://Character/Test/NPC/walk/n/frame_005.png" id="41_a51h8"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cuplg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_jgosx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_toexf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_yq07q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_uancq")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_31qak")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_308ai")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_p74lg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_g07y7")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_igs1f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_ryvti")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_djjng")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_p7nkx")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_2phv4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_g4lvt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_kpubm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_013fb")
+}],
+"loop": true,
+"name": &"idle_top",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_yge5h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_6jhkj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_3740e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_c2e6o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_cgxjd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_y4i5w")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_h7eg1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_my8st")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_07k1m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_owxso")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_5s5x5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_45c1a")
+}],
+"loop": true,
+"name": &"walk_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("30_nb0cj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_amkhh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_rsu48")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_5wo74")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_lfu46")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_lj12u")
+}],
+"loop": true,
+"name": &"walk_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("36_vp7on")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_0ckvb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_1pauq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_encf8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_7y7u5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_a51h8")
+}],
+"loop": true,
+"name": &"walk_top",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vxakg"]
+size = Vector2(32, 46)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k5705"]
+size = Vector2(32, 45)
+
+[node name="Vendor" type="CharacterBody2D"]
+script = ExtResource("1_dbjhl")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(36, 38)
+scale = Vector2(1.1875, 1.09765)
+sprite_frames = SubResource("SpriteFrames_cuplg")
+animation = &"walk_top"
+autoplay = "idle_down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(38, 38)
+shape = SubResource("RectangleShape2D_vxakg")
+
+[node name="Area2D" type="Area2D" parent="CollisionShape2D"]
+position = Vector2(-38, -38)
+script = ExtResource("4_vt2bs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionShape2D/Area2D"]
+position = Vector2(38, 37.5)
+shape = SubResource("RectangleShape2D_k5705")

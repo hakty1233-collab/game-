@@ -1,0 +1,110 @@
+[gd_scene load_steps=3 format=3 uid="uid://byee2b3qpbaa0"]
+
+[ext_resource type="Script" uid="uid://43ih0ac0gaxi" path="res://NPCs/Shop/shop_ui.gd" id="1_jty4k"]
+[ext_resource type="Texture2D" uid="uid://bg5ca0k30b8ov" path="res://UI/Art/x-button-hover.png" id="2_8k6ue"]
+
+[node name="ShopUI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_jty4k")
+
+[node name="ShopPanel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = -659.0
+offset_top = 142.0
+offset_right = -120.0
+offset_bottom = 508.0
+
+[node name="VendorName" type="Label" parent="ShopPanel"]
+layout_mode = 0
+offset_right = 45.0
+offset_bottom = 23.0
+
+[node name="CurrencyLabel" type="Label" parent="ShopPanel"]
+layout_mode = 0
+offset_left = 483.0
+offset_top = 319.0
+offset_right = 508.0
+offset_bottom = 342.0
+
+[node name="ItemContainer" type="VBoxContainer" parent="ShopPanel"]
+layout_mode = 0
+offset_left = 216.0
+offset_top = 51.0
+offset_right = 590.0
+offset_bottom = 312.0
+
+[node name="Item1" type="HBoxContainer" parent="ShopPanel/ItemContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="ShopPanel/ItemContainer/Item1"]
+layout_mode = 2
+
+[node name="PriceLabel" type="Label" parent="ShopPanel/ItemContainer/Item1"]
+layout_mode = 2
+
+[node name="BuyButton" type="Button" parent="ShopPanel/ItemContainer/Item1"]
+layout_mode = 2
+text = "Buy"
+
+[node name="Item2" type="HBoxContainer" parent="ShopPanel/ItemContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="ShopPanel/ItemContainer/Item2"]
+layout_mode = 2
+
+[node name="PriceLabel" type="Label" parent="ShopPanel/ItemContainer/Item2"]
+layout_mode = 2
+
+[node name="BuyButton" type="Button" parent="ShopPanel/ItemContainer/Item2"]
+layout_mode = 2
+text = "Buy"
+
+[node name="Item3" type="HBoxContainer" parent="ShopPanel/ItemContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="ShopPanel/ItemContainer/Item3"]
+layout_mode = 2
+
+[node name="PriceLabel" type="Label" parent="ShopPanel/ItemContainer/Item3"]
+layout_mode = 2
+
+[node name="BuyButton" type="Button" parent="ShopPanel/ItemContainer/Item3"]
+layout_mode = 2
+text = "Buy"
+
+[node name="Item4" type="HBoxContainer" parent="ShopPanel/ItemContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="ShopPanel/ItemContainer/Item4"]
+layout_mode = 2
+
+[node name="PriceLabel" type="Label" parent="ShopPanel/ItemContainer/Item4"]
+layout_mode = 2
+
+[node name="BuyButton" type="Button" parent="ShopPanel/ItemContainer/Item4"]
+layout_mode = 2
+text = "Buy"
+
+[node name="Item5" type="HBoxContainer" parent="ShopPanel/ItemContainer"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="ShopPanel/ItemContainer/Item5"]
+layout_mode = 2
+
+[node name="PriceLabel" type="Label" parent="ShopPanel/ItemContainer/Item5"]
+layout_mode = 2
+
+[node name="BuyButton" type="Button" parent="ShopPanel/ItemContainer/Item5"]
+layout_mode = 2
+text = "Buy"
+
+[node name="CloseButton" type="Button" parent="ShopPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.17
+anchor_bottom = 0.061
+offset_left = 493.0
+offset_right = 448.37
+offset_bottom = 24.674
+icon = ExtResource("2_8k6ue")
