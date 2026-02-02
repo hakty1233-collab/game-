@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://hkr1jy5vf4rr"]
+
+[node name="ResourceHealthBar" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_right = 348.0
+offset_bottom = 27.0

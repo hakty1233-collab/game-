@@ -93,10 +93,10 @@ func _ready() -> void:
 	_setup_toolbelt_display()  # Setup visual toolbelt
 
 	# Make panels draggable
-	_make_panel_draggable(skills_panel)
-	_make_panel_draggable(inv_panel)
-	if toolbelt_panel:
-		_make_panel_draggable(toolbelt_panel)
+	#_make_panel_draggable(skills_panel)
+	#_make_panel_draggable(inv_panel)
+	#if toolbelt_panel:
+		#_make_panel_draggable(toolbelt_panel)
 
 func _process(_dt: float) -> void:
 	var p: Node2D = PlayerGlobals.instance as Node2D
@@ -106,22 +106,22 @@ func _process(_dt: float) -> void:
 		player_marker.position = (p.global_position - minimap_origin) * MINIMAP_SCALE
 
 # ---------- Panel dragging ----------
-func _make_panel_draggable(panel: Control) -> void:
-	panel.mouse_filter = Control.MOUSE_FILTER_PASS
-	panel.connect("gui_input", Callable(self, "_on_panel_input").bind(panel))
+#func _make_panel_draggable(panel: Control) -> void:
+	#panel.mouse_filter = Control.MOUSE_FILTER_PASS
+	#panel.connect("gui_input", Callable(self, "_on_panel_input").bind(panel))
 
-func _on_panel_input(event: InputEvent, panel: Control) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				_dragging_panel = panel
-				_drag_offset = panel.get_global_position() - event.position
-			else:
-				if _dragging_panel == panel:
-					_dragging_panel = null
-	elif event is InputEventMouseMotion:
-		if _dragging_panel == panel:
-			panel.global_position = event.position + _drag_offset
+#func _on_panel_input(event: InputEvent, panel: Control) -> void:
+	#if event is InputEventMouseButton:
+		#if event.button_index == MOUSE_BUTTON_LEFT:
+			#if event.pressed:
+				#_dragging_panel = panel
+				#_drag_offset = panel.get_global_position() - event.position
+			#else:
+				#if _dragging_panel == panel:
+					#_dragging_panel = null
+	#elif event is InputEventMouseMotion:
+		#if _dragging_panel == panel:
+			#panel.global_position = event.position + _drag_offset
 
 # ---------- Panel toggles (mutually exclusive) ----------
 func _toggle_inventory() -> void:
@@ -319,12 +319,12 @@ func _load_inventory() -> void:
 			inv_grid.add_child(lbl)
 
 # Handle toolbelt changes (tools equipped)
-func _on_toolbelt_changed(skill: String, tool_id: String):
-	print("[HUD] Toolbelt changed: %s equipped %s" % [skill, tool_id])
+func _on_toolbelt_changed(skill: String, tool_name: String):
+	print("[HUD] Toolbelt changed: %s equipped %s" % [skill, tool_name])
 	# Refresh inventory to show updated quantities
-	_load_inventory()
+	call_deferred("_load_inventory")
 	# Refresh toolbelt display
-	_update_toolbelt_display()
+	call_deferred("_update_toolbelt_display")
 
 # ---------- ToolBelt Display (NEW) ----------
 func _setup_toolbelt_display():
@@ -403,6 +403,7 @@ func _update_toolbelt_display():
 	print("[HUD] ToolBelt.slots: ", ToolBelt.slots)
 	
 	# Tool icons (same as inventory)
+	# Tool icons
 	var TOOL_ICONS = {
 		"bronze_axe": preload("res://UI/Items/fishing_rod.png"),
 		"basic_rod": preload("res://UI/Items/fishing_rod.png"),
@@ -417,7 +418,7 @@ func _update_toolbelt_display():
 		if not container is VBoxContainer:
 			continue
 			
-		# Find the slot (should be second child after label)
+		# Find the slot
 		var slot = null
 		for child in container.get_children():
 			if child.has_meta("skill"):
@@ -425,28 +426,32 @@ func _update_toolbelt_display():
 				break
 		
 		if not slot:
-			print("[HUD] No slot found in container")
 			continue
 			
 		var skill = slot.get_meta("skill")
 		var equipped_tool = ToolBelt.slots.get(skill, null)
-		print("[HUD] Skill: %s, Equipped: %s" % [skill, equipped_tool])
 		
-		# Find icon node in slot
+		# Handle both string and dict tool storage
+		var tool_name = ""
+		if equipped_tool is String:
+			tool_name = equipped_tool
+		elif equipped_tool is Dictionary:
+			tool_name = equipped_tool.get("name", "")
+		
+		print("[HUD] Skill: %s, Equipped: %s" % [skill, tool_name])
+		
+		# Find icon node
 		var icon_node = slot.find_child("Icon", true, false)
 		if not icon_node:
-			print("[HUD] No icon node found for skill: %s" % skill)
 			continue
 		
 		# Update icon
-		if equipped_tool and equipped_tool != "":
-			var tool_key = equipped_tool.to_lower().replace(" ", "_")
+		if tool_name != "" and tool_name != null:
+			var tool_key = tool_name.to_lower().replace(" ", "_")
 			var icon = TOOL_ICONS.get(tool_key, null)
-			print("[HUD] Tool key: %s, Icon: %s" % [tool_key, icon])
 			icon_node.texture = icon
-			slot.tooltip_text = equipped_tool + "\n[" + skill + " Tool]"
+			slot.tooltip_text = tool_name + "\n[" + skill + " Tool]\nRight-click in inventory to unequip"
 		else:
-			print("[HUD] No tool equipped for %s" % skill)
 			icon_node.texture = null
 			slot.tooltip_text = skill + "\n[Empty Slot]"
 

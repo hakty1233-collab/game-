@@ -13,10 +13,13 @@ var ICONS: Dictionary = {
 	"plank": preload("res://UI/Items/plank.png"),
 	"copper_ore": preload("res://UI/Items/copper_ore.png"),
 	
-	# Add tool icons (using placeholders for now)
-	"bronze_axe": preload("res://UI/Items/fishing_rod.png"),       # placeholder
-	"basic_rod": preload("res://UI/Items/fishing_rod.png"),   # placeholder
-	"bronze_pickaxe": preload("res://UI/Items/fishing_rod.png")  # placeholder
+	# Tool icons
+	"bronze_axe": preload("res://UI/Items/fishing_rod.png"),
+	"basic_rod": preload("res://UI/Items/fishing_rod.png"),
+	"bronze_pickaxe": preload("res://UI/Items/fishing_rod.png"),
+	"iron_axe": preload("res://UI/Items/fishing_rod.png"),
+	"advanced_rod": preload("res://UI/Items/fishing_rod.png"),
+	"iron_pickaxe": preload("res://UI/Items/fishing_rod.png")
 }
 
 # Tool to skill mapping
@@ -87,11 +90,23 @@ func _update_tooltip():
 	if quantity > 1:
 		tooltip_text += " x%d" % quantity
 	
-	# Add tool info
+	# Check if this tool is currently equipped
 	if is_tool(item_name):
 		var skill = get_tool_skill(item_name)
+		var equipped_tool = ToolBelt.get_equipped_tool(skill)
+		var is_equipped = false
+		
+		# Handle both string and dict returns
+		if equipped_tool is String:
+			is_equipped = (normalize_name(equipped_tool) == normalize_name(item_name))
+		elif equipped_tool is Dictionary:
+			is_equipped = (normalize_name(equipped_tool.get("name", "")) == normalize_name(item_name))
+		
 		tooltip_text += "\n[Tool - %s]" % skill
-		tooltip_text += "\nClick to equip"
+		if is_equipped:
+			tooltip_text += "\n[EQUIPPED] - Right-click to unequip"
+		else:
+			tooltip_text += "\nLeft-click to equip"
 
 # ---------- Mouse interaction ----------
 func _ready():
@@ -99,20 +114,42 @@ func _ready():
 	mouse_exited.connect(_on_mouse_exited)
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
 			_on_item_clicked()
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			_on_item_right_clicked()
 
 func _on_item_clicked():
 	if item.is_empty():
 		return
 	
 	var item_name = String(item.get("name", ""))
-	print("[ItemSlot] Clicked item: %s" % item_name)
 	
 	# Check if this is a tool
 	if is_tool(item_name):
 		_try_equip_tool(item_name)
+
+func _on_item_right_clicked():
+	if item.is_empty():
+		return
+	
+	var item_name = String(item.get("name", ""))
+	
+	# Check if this tool is equipped - if so, unequip it
+	if is_tool(item_name):
+		var skill = get_tool_skill(item_name)
+		var equipped = ToolBelt.get_equipped_tool(skill)
+		
+		# Check if this specific tool is equipped
+		var is_this_tool_equipped = false
+		if equipped is String:
+			is_this_tool_equipped = (normalize_name(equipped) == normalize_name(item_name))
+		elif equipped is Dictionary:
+			is_this_tool_equipped = (normalize_name(equipped.get("name", "")) == normalize_name(item_name))
+		
+		if is_this_tool_equipped:
+			_try_unequip_tool(item_name)
 
 func _try_equip_tool(tool_name: String):
 	var skill = get_tool_skill(tool_name)
@@ -129,27 +166,59 @@ func _try_equip_tool(tool_name: String):
 		print("[ItemSlot] Tool not found in inventory: %s" % tool_name)
 		return
 	
-	# Remove tool from inventory
+	# Check if there's already a tool equipped - unequip it first
+	var currently_equipped = ToolBelt.get_equipped_tool(skill)
+	if currently_equipped != null:
+		var old_tool_name = ""
+		if currently_equipped is String:
+			old_tool_name = currently_equipped
+		elif currently_equipped is Dictionary:
+			old_tool_name = currently_equipped.get("name", "")
+		
+		if old_tool_name != "":
+			print("[ItemSlot] Unequipping old tool: %s" % old_tool_name)
+			ToolBelt.unequip_tool(skill)
+			# Return old tool to inventory
+			PlayerInventory.add_item({"name": old_tool_name, "quantity": 1})
+	
+	# Remove new tool from inventory
 	var removed = PlayerInventory.remove_item(tool_name, 1)
 	if removed > 0:
 		print("[ItemSlot] Removed %d %s from inventory" % [removed, tool_name])
 		
 		# Equip the tool
 		ToolBelt.equip_tool(skill, tool_name)
-		print("[ItemSlot] Called ToolBelt.equip_tool(%s, %s)" % [skill, tool_name])
 		print("[ItemSlot] ToolBelt.slots after equip: ", ToolBelt.slots)
 		
 		# Show feedback
-		print("[ItemSlot] Equipped %s for %s skill" % [tool_name, skill])
-		_show_equip_feedback(tool_name)
+		_show_equip_feedback(tool_name, true)
 	else:
 		print("[ItemSlot] Failed to remove tool from inventory")
 
-func _show_equip_feedback(tool_name: String):
-	# Create floating "Equipped!" text
+func _try_unequip_tool(tool_name: String):
+	var skill = get_tool_skill(tool_name)
+	if skill == "":
+		return
+	
+	print("[ItemSlot] === UNEQUIPPING TOOL ===")
+	print("[ItemSlot] Tool: %s, Skill: %s" % [tool_name, skill])
+	
+	# Unequip from toolbelt
+	var unequipped_name = ToolBelt.unequip_tool(skill)
+	
+	if unequipped_name != "":
+		# Return to inventory
+		PlayerInventory.add_item({"name": unequipped_name, "quantity": 1})
+		print("[ItemSlot] Returned %s to inventory" % unequipped_name)
+		
+		# Show feedback
+		_show_equip_feedback(tool_name, false)
+
+func _show_equip_feedback(tool_name: String, equipped: bool):
+	# Create floating text
 	var feedback_label = Label.new()
-	feedback_label.text = "Equipped!"
-	feedback_label.modulate = Color.GREEN
+	feedback_label.text = "Equipped!" if equipped else "Unequipped!"
+	feedback_label.modulate = Color.GREEN if equipped else Color.YELLOW
 	feedback_label.z_index = 100
 	feedback_label.position = global_position + Vector2(0, -20)
 	
